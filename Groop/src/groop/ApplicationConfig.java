@@ -1,7 +1,8 @@
 package groop;
 
-import groop.service.user.AuthenticationService;
+import groop.service.user.RoleService;
 import groop.service.user.UserService;
+import groop.service.user.UsersService;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -18,7 +19,9 @@ public class ApplicationConfig extends Application {
 	    public ApplicationConfig() {
 	        HashSet<Class<?>> c = new HashSet<>();
 	       
-	        c.add(AuthenticationService.class);        
+	        c.add(RoleService.class);
+	        
+	        c.add(UsersService.class);        
 	        c.add(UserService.class);        
 	        
 	        classes = Collections.unmodifiableSet(c);

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="groop_db" transaction-type="JTA">
+	   <jta-data-source>jdbc/__groop</jta-data-source>
+	   <class>groop.persistance.jpa.entities.City</class>
+	   <class>groop.persistance.jpa.entities.Conversation</class>
+	   <class>groop.persistance.jpa.entities.Country</class>
+	   <class>groop.persistance.jpa.entities.Event</class>
+	   <class>groop.persistance.jpa.entities.Geolocation</class>
+	   <class>groop.persistance.jpa.entities.Interest</class>
+	   <class>groop.persistance.jpa.entities.Location</class>
+	   <class>groop.persistance.jpa.entities.Message</class>
+	   <class>groop.persistance.jpa.entities.Role</class>
+	   <class>groop.persistance.jpa.entities.SessionToken</class>
+	   <class>groop.persistance.jpa.entities.User</class>
+	   <class>groop.persistance.jpa.compositeEntities.ConvoMessage</class>
+	   <class>groop.persistance.jpa.compositeEntities.ConvoMessagePK</class>
+	   <class>groop.persistance.jpa.compositeEntities.ConvoParticipant</class>
+	   <class>groop.persistance.jpa.compositeEntities.ConvoParticipantPK</class>
+	   <class>groop.persistance.jpa.compositeEntities.EventInterest</class>
+	   <class>groop.persistance.jpa.compositeEntities.EventInterestPK</class>
+	   <class>groop.persistance.jpa.compositeEntities.FriendsWith</class>
+	   <class>groop.persistance.jpa.compositeEntities.FriendsWithPK</class>
+	   <class>groop.persistance.jpa.compositeEntities.UserInterest</class>
+	   <class>groop.persistance.jpa.compositeEntities.UserInterestPK</class>
+	</persistence-unit>
+</persistence>
