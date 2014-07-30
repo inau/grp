@@ -22,9 +22,6 @@ public class AuthenticationService {
 	@Context
     private UriInfo uriInfo;
 	
-    @Context
-    private UriInfo context;
-
     /**
      * Default constructor. 
      */

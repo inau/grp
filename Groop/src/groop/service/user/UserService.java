@@ -1,29 +1,35 @@
 package groop.service.user;
 
 
-import groop.persistance.entities.eUser;
-import groop.persistance.logic.implementation.UserAccess;
+import groop.persistance.jpa.entities.User;
+import groop.requests.user.NewUserRequest;
 
-import java.util.List;
+import java.io.StringWriter;
 
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
-@Path("users")
+@Path("user")
 @Stateless
-@Consumes("application/xml")
-@Produces("application/xml")
+@Consumes({MediaType.APPLICATION_JSON, MediaType.TEXT_HTML, MediaType.TEXT_XML, MediaType.TEXT_PLAIN })
+@Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_HTML, MediaType.TEXT_XML, MediaType.TEXT_PLAIN })
 public class UserService {
 	
-	UserAccess ua = new UserAccess();
+	@PersistenceContext
+	EntityManager em;
 	
 	@Context
     private UriInfo uriInfo;
@@ -34,43 +40,66 @@ public class UserService {
     public UserService() {
     }
     
-	@POST
-    public String createUser(@QueryParam("uname") String uname, @QueryParam("psw") String psw) {    
-    	if(ua.userExists(uname)) return "Username already taken";  
-		
-    	eUser user = new eUser();
-    	user.setUname(uname);
-    	user.setPassword(psw);
-    	user.setRoleRef(0);
-    	  
-    	try {
-			ua.createUser(user);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-    	  
-        return "Hello "+uname+" with secret "+psw;
-    }
-
 	@GET
-	public String getUsers() {
-		List<eUser> l = ua.getUsers();
-		if(l == null) return "Result list was empty";
-		return "Users #"+l.size()+" - "+l.toString();
+	public String rootUsage() {
+		return "<h1>User service:</h1>\n"
+				+ "<br>Lookup user: add username or id to uri ie. /groop/rest/user/Ted OR /groop/rest/user/1 </br> \n"
+				+ "<br>Create user: Issue POST with json representation to request body "
+				+ "<br>Obtain template by appending template.json or template.xml to current uri</br> </br>\n ";
 	}
-    
+
+	/**
+	 * Get a json template for creating a new user request
+	 * @return NewUserRequest
+	 */
 	@GET
-	@Path("{uname}")
-	public String getUser(@PathParam("uname") String uname) {
-		eUser u = ua.getUser(uname);
-		return u.toString();
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("template.json")
+	public NewUserRequest getNewUserRequestTemplateJson() {
+		NewUserRequest nur = new NewUserRequest();
+		return nur;
+	}
+	@GET
+	@Produces(MediaType.TEXT_XML)
+	@Path("template.xml")
+	public NewUserRequest getNewUserRequestTemplateXml() {
+		NewUserRequest nur = new NewUserRequest();
+		return nur;
 	}
 	
+	/**
+	 * Get user by path parameter uname
+	 * @param uname
+	 * @return User
+	 */
 	@GET
-    @Path("role/{uname}")
-	public String getUserRole(@PathParam("uname") String uname) {
-		return "Hi "+uname+" with role AWSUMZ";
+	@Path("name/{uname}")
+	public User getUserByName(@PathParam("uname") String uname) {
+		return (User)em.createNamedQuery("User.findByName", User.class).setParameter("uname", uname);
 	}
-    
+
+	/**
+	 * Get user by path parameter uid
+	 * @param uname
+	 * @return User
+	 */
+	@GET
+	@Path("id/{uid}")
+	public User getUserById(@PathParam("uid") int uid) {
+		return em.find(User.class, uid);
+	}
+	
+	@POST
+	@Consumes(MediaType.TEXT_XML)
+	public String createUserXml(NewUserRequest nur) {
+	    	
+	    	return "Create user was called with json";
+	}
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String createUserJson(NewUserRequest nur) {
+    	
+    	return "Create user was called with json";
+    }
     
 }
